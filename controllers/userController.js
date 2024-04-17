@@ -5,6 +5,7 @@ import express from 'express';
 import mysql from 'mysql2';
 const app = express();
 
+import bcrypt from 'bcrypt'
 import User from '../models/userModel.js';
 
 
@@ -13,7 +14,10 @@ const userController = {
     createUser: async (req, res) => {
         try {
             const { username, email, password } = req.body;
-            const newUser = new User(username, email, password);
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const newUser = new User(username, email, hashedPassword);
             // saving the user to a database
             res.status(201).json({ message: 'User created successfully', user: newUser });
         } catch (error) {
