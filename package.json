@@ -2,16 +2,20 @@
   "name": "trackit",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "type":"module",
+  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon start"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mysql2": "^3.9.3"
+    "mysql2": "^3.9.3",
+    "nodemon": "^3.1.0",
+    "sequelize": "^6.37.3"
   }
 }
