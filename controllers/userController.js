@@ -8,7 +8,6 @@ const app = express();
 import bcrypt from 'bcrypt'
 import User from '../models/userModel.js';
 
-
 const userController = {
     // Create a new user
     createUser: async (req, res) => {
@@ -26,12 +25,37 @@ const userController = {
         }
     },
 
+    // Authenticate user
+    authenticateUser: async (req, res) => {
+        try {
+            const { email, password } = req.body;
+
+            // Find user by email
+            const user = await User.findByEmail(email);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Compare passwords
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(401).json({ message: 'Incorrect email or password' });
+            }
+
+            // Passwords match, user authenticated
+            res.status(200).json({ message: 'Authentication successful', user });
+        } catch (error) {
+            console.error('Error authenticating user:', error);
+            res.status(500).json({ message: 'Error authenticating user' });
+        }
+    },
+
     // Get a user by ID
     getUserById: async (req, res) => {
         try {
             const userId = req.params.id;
             // fetching the user from the database by ID
-            const user = new User("dummyUser", "dummy@example.com", "dummyPassword");
+            const user = await User.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
