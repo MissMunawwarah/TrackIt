@@ -21,20 +21,3 @@ db.connect((err) => {
 })
 
 export default db;
-
-//  //Getting users
-// app.get('/users', (req, res) => {
-//    db.query('SELECT * FROM users', (err, results) => {
-//        if (err) throw err;
-//        res.json(results);
-//    });
-// });
-
-// //create a new user
-// app.post('/users', (req, res) => {
-//    const { username, email, password } = req.body;
-//    db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password], (err, result) => {
-//        if (err) throw err;
-//        res.status(201).send('User added successfully');
-//    });
-// });
