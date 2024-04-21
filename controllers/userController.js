@@ -1,23 +1,43 @@
-import dotenv from 'dotenv';
-dotenv.config();
+const express = require('express');
+const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-import express from 'express';
-import mysql from 'mysql2';
 const app = express();
 
-import bcrypt from 'bcrypt'
-import User from '../models/userModel.js';
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModel.js');
+const Rider = require('./models/riderModel.js');
+const BusinessOwner = require('../models/businessOwnerModel.js');
+const Customer = require('../models/customerModel.js');
 
 const userController = {
-    // Create a new user
+    // Creating a new usercleare
     createUser: async (req, res) => {
         try {
-            const { username, email, password } = req.body;
-            
+            const { username, email, password, role } = req.body;
+
+            // Checking if the role is valid
+            if (role !== 'rider' && role !== 'business_owner' && role !== 'customer') {
+                return res.status(400).json({ message: 'Invalid role' });
+            }
+
+            // Hashing the password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const newUser = new User(username, email, hashedPassword);
-            // saving the user to a database
+            // Creating the user based on the role
+            let newUser;
+            if (role === 'rider') {
+                newUser = new Rider(username, email, hashedPassword);
+            } else if (role === 'business_owner') {
+                newUser = new BusinessOwner(username, email, hashedPassword);
+            } else if (role === 'customer') {
+                newUser = new Customer(username, email, hashedPassword);
+            }
+
+            // Saving the user to the database
+            await newUser.save();
+
             res.status(201).json({ message: 'User created successfully', user: newUser });
         } catch (error) {
             console.error('Error creating user:', error);
@@ -25,40 +45,46 @@ const userController = {
         }
     },
 
-    // Authenticate user
+    // Authenticating user
     authenticateUser: async (req, res) => {
         try {
             const { email, password } = req.body;
 
-            // Find user by email
+            // Finding user by email
             const user = await User.findByEmail(email);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
 
-            // Compare passwords
+            // Comparing passwords
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 return res.status(401).json({ message: 'Incorrect email or password' });
             }
 
-            // Passwords match, user authenticated
-            res.status(200).json({ message: 'Authentication successful', user });
+            // Passwords match, generate token
+            const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            // Respond with token
+            res.status(200).json({ message: 'Authentication successful', token });
         } catch (error) {
             console.error('Error authenticating user:', error);
             res.status(500).json({ message: 'Error authenticating user' });
         }
     },
 
-    // Get a user by ID
+    // Getting user by ID
     getUserById: async (req, res) => {
         try {
             const userId = req.params.id;
-            // fetching the user from the database by ID
+
+            // Finding user by ID
             const user = await User.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
+
+            // Responding with user data
             res.status(200).json({ user });
         } catch (error) {
             console.error('Error getting user by ID:', error);
@@ -66,12 +92,15 @@ const userController = {
         }
     },
 
-    // Update a user
+    // Updating user
     updateUser: async (req, res) => {
         try {
             const userId = req.params.id;
             const { username, email, password } = req.body;
-            // updating the user in the database
+
+            // Updating user in the database
+            await User.update(userId, { username, email, password });
+
             res.status(200).json({ message: 'User updated successfully' });
         } catch (error) {
             console.error('Error updating user:', error);
@@ -79,11 +108,14 @@ const userController = {
         }
     },
 
-    // Delete a user
+    // Deleting user
     deleteUser: async (req, res) => {
         try {
             const userId = req.params.id;
-            // deleting the user from the database
+
+            // Deleting user from the database
+            await User.delete(userId);
+
             res.status(200).json({ message: 'User deleted successfully' });
         } catch (error) {
             console.error('Error deleting user:', error);
@@ -92,4 +124,4 @@ const userController = {
     }
 };
 
-export default userController;
+module.exports = userController;

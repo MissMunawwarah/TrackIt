@@ -1,17 +1,50 @@
-import dotenv from 'dotenv';
-dotenv.config();
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db.js');
+const User = require('./userModel.js');
 
-import express from 'express';
-import mysql from 'mysql2';
-const app = express();
-
-class Rider {
-    constructor(userId, name, vehicleType) {
-        this.userId = userId;
-        this.name = name;
-        this.vehicleType = vehicleType;
-        this.rating = 0; // Default rating
-    }
-}
-
-export default Rider;
+const Rider = sequelize.define('Rider', {
+    vehicle_type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    license_details: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    background_check_results: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    vehicle_registration: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    average_rating: {
+      type: DataTypes.DECIMAL(3, 2),
+      defaultValue: 0.00,
+    },
+    total_ratings: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    friendly_rating: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    communication_rating: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    punctuality_rating: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+  });
+  
+  Rider.belongsTo(User);
+  
+  module.exports = Rider;

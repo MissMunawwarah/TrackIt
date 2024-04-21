@@ -1,9 +1,6 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import db from './db.js';
-
-dotenv.config();
-
+const express = require('express');
+const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js'
