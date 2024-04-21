@@ -1,4 +1,4 @@
--- Active: 1712522728048@@127.0.0.1@3306@user_app
+-- Active: 1712522728048@@127.0.0.1@3306@TrackIt
 CREATE DATABASE TrackIt;
 USE TrackIt;
 
@@ -8,7 +8,6 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('business_owner', 'rider', 'customer') NOT NULL,
-    -- Add additional common fields here (e.g., name, contact_details, etc.)
     name VARCHAR(255) NOT NULL,
     contact_details VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -46,6 +45,14 @@ CREATE TABLE customers (
     preferred_delivery_location VARCHAR(255) NOT NULL,
     payment_gateway_id INT,
     preferred_language VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Create the systemAdmin table
+CREATE TABLE systemAdmin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,  -- Foreign key reference to the users table
+    access_level ENUM('admin', 'superadmin') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
@@ -137,6 +144,9 @@ ALTER TABLE riders ADD COLUMN total_ratings INT DEFAULT 0;
 ALTER TABLE riders ADD COLUMN friendly_rating INT DEFAULT 0;
 ALTER TABLE riders ADD COLUMN communication_rating INT DEFAULT 0;
 ALTER TABLE riders ADD COLUMN punctuality_rating INT DEFAULT 0;
+
+ALTER TABLE users
+MODIFY role ENUM('business_owner', 'rider', 'customer', 'systemadmin');
 
 
 SHOW TABLES

@@ -7,7 +7,7 @@ const app = express();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel.js');
-const Rider = require('./models/riderModel.js');
+const Rider = require('../models/riderModel.js');
 const BusinessOwner = require('../models/businessOwnerModel.js');
 const Customer = require('../models/customerModel.js');
 
