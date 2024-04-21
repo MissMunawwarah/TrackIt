@@ -10,6 +10,7 @@ const User = require('../models/userModel.js');
 const Rider = require('../models/riderModel.js');
 const BusinessOwner = require('../models/businessOwnerModel.js');
 const Customer = require('../models/customerModel.js');
+const SystemAdmin = require('../models/systemAdminModel.js');
 
 const userController = {
     // Creating a new usercleare
@@ -18,7 +19,7 @@ const userController = {
             const { username, email, password, role } = req.body;
 
             // Checking if the role is valid
-            if (role !== 'rider' && role !== 'business_owner' && role !== 'customer') {
+            if (role !== 'rider' && role !== 'business_owner' && role !== 'customer' && role !== 'systemAdmin') {
                 return res.status(400).json({ message: 'Invalid role' });
             }
 
@@ -33,6 +34,8 @@ const userController = {
                 newUser = new BusinessOwner(username, email, hashedPassword);
             } else if (role === 'customer') {
                 newUser = new Customer(username, email, hashedPassword);
+            } else if (role === 'systemAdmin') { 
+                newUser = new SystemAdmin(username, email, hashedPassword);
             }
 
             // Saving the user to the database
