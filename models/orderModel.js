@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
-const User = require('./userModel.js');
+const Customer = require('../models/customerModel.js');
 
 
 const Order = sequelize.define('Order', {
@@ -38,6 +38,6 @@ const Order = sequelize.define('Order', {
     },
   });
   
-  Order.belongsTo(User);
+  Order.belongsTo(Customer);
   
   module.exports = Order;

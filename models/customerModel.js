@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
-const User = require('./userModel.js');
+const User = require('../models/userModel.js');
 
 const Customer = sequelize.define('Customer', {
     preferred_delivery_location: {

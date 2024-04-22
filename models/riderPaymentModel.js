@@ -1,8 +1,6 @@
-// riderPaymentModel.js
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
-const Rider = require('../riderModel.js');
+const Rider = require('../models/riderModel.js');
 
 const RiderPayment = sequelize.define('RiderPayment', {
   payment_amount: {

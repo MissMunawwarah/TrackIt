@@ -1,5 +1,3 @@
-
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
 const Customer = require('./customerModel.js');

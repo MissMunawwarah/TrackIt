@@ -1,8 +1,9 @@
 
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
-const Rider = require('../riderModel.js');
-const Order = require('./orderModel.js');
+const Rider = require('../models/riderModel.js');
+const Order = require('../models/orderModel.js');
+
 const AssignedRequest = sequelize.define('AssignedRequest', {
   status: {
     type: DataTypes.ENUM('pending', 'accepted', 'delivered'),

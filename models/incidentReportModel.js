@@ -1,7 +1,7 @@
 
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db.js');
-const Rider = require('../riderModel.js');
+const Rider = require('../models/riderModel.js');
 
 const IncidentReport = sequelize.define('IncidentReport', {
   incident_date: {
