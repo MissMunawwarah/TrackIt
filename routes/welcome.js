@@ -6,7 +6,7 @@ const mysql = require('mysql2');
 const app = express();
 const router = express.Router();
 
-app.get("/", (req, res) => {
+app.get("/welcome", (req, res) => {
     res.status(200).send("Welcome to my API");
 });
 
