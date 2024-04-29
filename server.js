@@ -1,8 +1,10 @@
 const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const app = express();
+// const cors = require("cors");
 const router = express.Router();
 
 const userRoutes = require('./routes/userRoutes.js');
@@ -15,6 +17,21 @@ const orderRoutes = require('./routes/orderRoutes.js');
 const riderPaymentRoutes = require('./routes/riderPaymentRoutes.js');
 const riderRatingRoutes = require('./routes/riderRatingRoutes.js');
 
+
+// Define routes
+const PORT = process.env.PORT || 5000;
+
+// app.use(cors({
+//   origin: ""
+// }));
+
+app.use(express.json())
+
+app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  app.use(bodyParser.json())
+
 // Use user routes
 app.use('/api/users', userRoutes);
 app.use('/api/customerPayments', customerPaymentRoutes);
@@ -26,9 +43,6 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/riderPayments', riderPaymentRoutes);
 app.use('/api/riderRatings', riderRatingRoutes);
 
-// Define routes
-const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-    console.log(`Server is running on PORT ${PORT}`);
+  console.log(`Server is running on PORT ${PORT}`);
 });

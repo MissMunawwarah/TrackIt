@@ -3,6 +3,11 @@ const sequelize = require('../db.js');
 const User = require('./userModel.js');
 
 const Rider = sequelize.define('Rider', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+},
     vehicle_type: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -43,6 +48,8 @@ const Rider = sequelize.define('Rider', {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+  }, {
+    timestamps: false
   });
   
   Rider.belongsTo(User);

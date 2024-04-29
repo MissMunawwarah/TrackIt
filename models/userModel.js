@@ -23,10 +23,13 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  created_at: {
+  createdAt: { // Change from created_at to createdAt
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+
+    createdAt: 'created_at', // Customize createdAt field name
+    updatedAt: false // Disable updatedAt field
 });
 
 module.exports = User;
