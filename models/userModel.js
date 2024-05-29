@@ -1,7 +1,11 @@
 const { DataTypes } = require('sequelize');
+const dotenv = require('dotenv');  
+dotenv.config({ path: 'env.default' });
+
 const sequelize = require('../db.js');
 
-const User = sequelize.define('User', {
+
+const User = sequelize.define('user', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,

@@ -3,7 +3,7 @@ const sequelize = require('../db.js');
 const User = require('./userModel.js');
 
 const Rider = sequelize.define('Rider', {
-  id: {
+  user_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true

@@ -3,6 +3,13 @@ const sequelize = require('../db.js');
 const User = require('./userModel.js');
 
 const BusinessOwner = sequelize.define('BusinessOwner', {
+    user_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+    },
+    
+    
     business_name: {
       type: DataTypes.STRING,
       allowNull: false,
