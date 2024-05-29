@@ -1,5 +1,5 @@
 const express = require('express');
-const { Sequelize } = require('sequelize');
+const  Sequelize  = require('sequelize');
 require('dotenv').config();
 
 const app = express();
@@ -125,12 +125,13 @@ const userController = {
     createSystemAdmin: async (req, res) => {
         try {
             const { userId } = req.params; // Assuming userId is passed as a URL parameter
-            const { access_level } = req.body;
+            const { contactDetails, accessLevel } = req.body;
     
             // Create the system admin profile
             const newSystemAdmin = await SystemAdmin.create({
                 user_id: userId,
-                access_level
+                contactDetails,
+                accessLevel
             });
     
             res.status(201).json({ message: 'System admin profile created successfully', systemAdmin: newSystemAdmin });
@@ -171,15 +172,18 @@ const userController = {
 getUserById: async (req, res) => {
     try {
         const userId = req.params.id;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is missing or invalid' });
+        }
 
         // Finding user by ID
-        const user = await User.findOne(userId);
+        const user = await User.findOne({ where: { id: userId } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         // Responding with user data
-        res.status(200).json( user );
+        res.status(200).json(user);
     } catch (error) {
         console.error('Error getting user by ID:', error);
         res.status(500).json({ message: 'Error getting user' });
